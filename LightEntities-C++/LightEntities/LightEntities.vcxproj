@@ -123,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="Component\component_info.hpp" />
     <ClInclude Include="Component\component_type.hpp" />
+    <ClInclude Include="entities.hpp" />
     <ClInclude Include="Entity\entities.hpp" />
     <ClInclude Include="Entity\entity.hpp" />
     <ClInclude Include="Entity\pool.hpp" />

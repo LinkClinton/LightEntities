@@ -1,9 +1,7 @@
 #include <iostream>
 #include <chrono>
 
-#include "Component/component_info.hpp"
-#include "System/system.hpp"
-#include "Entity/entities.hpp"
+#include "entities.hpp"
 
 typedef std::chrono::high_resolution_clock Time;
 
@@ -17,9 +15,9 @@ struct speed {
 	float vx, vy;
 };
 
-class move_system : public light::entities::system<unsigned, unsigned> {
+class move_system : public light::entities::system32 {
 public:
-	move_system(const std::vector<component_type> &list) : system<unsigned, unsigned>(list) {}
+	move_system(const std::vector<component_type> &list) : system32(list) {}
 
 	void execute(const std::vector<entity<unsigned, unsigned>>& entities) const override {
 		for (auto e : entities) {
@@ -36,7 +34,7 @@ int main() {
 	
 	const auto size = 1000000;
 
-	entities<unsigned, unsigned> entities;
+	entities32 entities;
 
 	entities.add_pool({
 		entities.typeof<position>(),
