@@ -22,10 +22,10 @@ namespace light {
 		struct entity {
 		private:
 			IdType pool_identity;
-			pool<IdType, BitType>* pool;
+			pool<IdType, BitType>* from_pool;
 		public:
 			entity(IdType identity, light::entities::pool<IdType, BitType>* pool) :
-				pool_identity(identity), pool(pool) {
+				pool_identity(identity), from_pool(pool) {
 				
 			}
 

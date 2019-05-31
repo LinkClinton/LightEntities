@@ -11,13 +11,13 @@ namespace light {
 			typename Limit1 = allow_unsigned_type<BitType>>
 		class system {
 		private:
-			match match;	
+			match requirement;	
 		public:
 			system();
 
 			system(const std::vector<component_type> &components);
 
-			virtual void execute(const std::vector<entity<IdType, BitType>> &entities) const {}
+			virtual void execute(const std::vector<entity<IdType, BitType>> &entities) {}
 
 			auto rule() const -> light::entities::match;
 		};
@@ -26,7 +26,7 @@ namespace light {
 			typename IdType, typename BitType,
 			typename Limit0, typename Limit1>
 		system<IdType, BitType, Limit0, Limit1>::system() :
-			match({}) {
+			requirement({}) {
 
 		}
 
@@ -34,14 +34,14 @@ namespace light {
 			typename IdType, typename BitType,
 			typename Limit0, typename Limit1>
 		system<IdType, BitType, Limit0, Limit1>::system(const std::vector<component_type>& components) :
-			match(components) {
+			requirement(components) {
 		}
 
 		template<
 			typename IdType, typename BitType,
 			typename Limit0, typename Limit1>
 		auto system<IdType, BitType, Limit0, Limit1>::rule() const -> light::entities::match {
-			return match;
+			return requirement;
 		}
 	}
 }

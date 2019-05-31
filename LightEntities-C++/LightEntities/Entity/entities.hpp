@@ -24,9 +24,9 @@ namespace light {
 
 			void add_pool(const std::vector<component_type> &components, size_t reserve = 255);
 
-			auto pool(size_t index) -> pool<IdType, BitType>&;
+			auto pool(size_t index) -> light::entities::pool<IdType, BitType>&;
 
-			void execute(const system<IdType, BitType> &system);
+			void execute(system<IdType, BitType> &system);
 
 			template<typename Type>
 			auto typeof() -> const component_type&;
@@ -52,7 +52,7 @@ namespace light {
 		}
 
 		template <typename IdType, typename BitType, typename Limit0, typename Limit1>
-		void entities<IdType, BitType, Limit0, Limit1>::execute(const system<IdType, BitType>& system) {
+		void entities<IdType, BitType, Limit0, Limit1>::execute(system<IdType, BitType> &system) {
 			std::vector<entity<IdType, BitType>> entities;
 
 			for (const auto& pool : pools) {

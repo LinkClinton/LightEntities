@@ -14,7 +14,7 @@ namespace light {
 		class pool {
 		private:
 			entity_solver<BitType> solver;
-			allocator<IdType> allocator;
+			allocator<IdType> entity_allocator;
 
 			std::shared_ptr<component_info> info;
 
@@ -62,7 +62,7 @@ namespace light {
 
 			solver.add_component(
 				mapped_identity,
-				allocator[identity],
+				entity_allocator[identity],
 				component);
 		}
 
@@ -74,7 +74,7 @@ namespace light {
 			const component_type& type_info_ = info->typeof<Component>();
 			const auto mapped_identity = components_mapped[type_info_.identity];
 
-			solver.remove_component(mapped_identity, allocator[identity]);
+			solver.remove_component(mapped_identity, entity_allocator[identity]);
 		}
 
 		template <typename IdType, typename BitType, typename Limit0, typename Limit1>
@@ -85,14 +85,14 @@ namespace light {
 			const component_type& type_info_ = info->typeof<Component>();
 			const auto mapped_identity = components_mapped[type_info_.identity];
 
-			return (*static_cast<Component*>(solver.component(mapped_identity, allocator[identity])));
+			return (*static_cast<Component*>(solver.component(mapped_identity, entity_allocator[identity])));
 		}
 
 		template <typename IdType, typename BitType, typename Limit0, typename Limit1>
 		pool<IdType, BitType, Limit0, Limit1>::pool(
 			const std::shared_ptr<component_info> &info,
 			const std::vector<component_type> &components, size_t reserve) :
-			solver(components), allocator(solver.size(), static_cast<IdType>(reserve), 0),
+			solver(components), entity_allocator(solver.size(), static_cast<IdType>(reserve), 0),
 			info(info), components_count(components.size()) {
 
 			size_t max_count = 0;
@@ -129,12 +129,12 @@ namespace light {
 
 		template <typename IdType, typename BitType, typename Limit0, typename Limit1>
 		auto pool<IdType, BitType, Limit0, Limit1>::allocate() -> entity<IdType, BitType> {
-			return entity<IdType, BitType>(allocator.allocate(), this);
+			return entity<IdType, BitType>(entity_allocator.allocate(), this);
 		}
 
 		template <typename IdType, typename BitType, typename Limit0, typename Limit1>
 		void pool<IdType, BitType, Limit0, Limit1>::free(const entity<IdType, BitType>& entity) {
-			allocator.free(entity.identity);
+			entity_allocator.free(entity.identity);
 		}
 
 		template <typename IdType, typename BitType, typename Limit0, typename Limit1>
@@ -150,10 +150,10 @@ namespace light {
 				match_rule.set(components_mapped[component.identity], true);
 			}
 
-			for (IdType index = 0; index < allocator.location(); ++index) {
-				if (!allocator.exist(index)) continue;;
+			for (IdType index = 0; index < entity_allocator.location(); ++index) {
+				if (!entity_allocator.exist(index)) continue;;
 
-				if (solver.match(allocator[index], match_rule)) entities.emplace_back(entity<IdType, BitType>(index, this));
+				if (solver.match(entity_allocator[index], match_rule)) entities.emplace_back(entity<IdType, BitType>(index, this));
 			}
 
 			return entities;
@@ -162,19 +162,19 @@ namespace light {
 		template <typename IdType, typename BitType, typename Limit0, typename Limit1>
 		template <typename Component>
 		void entity<IdType, BitType, Limit0, Limit1>::add_component(const Component& component) {
-			pool->add_component(pool_identity, component);
+			from_pool->add_component(pool_identity, component);
 		}
 
 		template <typename IdType, typename BitType, typename Limit0, typename Limit1>
 		template <typename Component>
 		void entity<IdType, BitType, Limit0, Limit1>::remove_component() {
-			pool->template remove_component<Component>(pool_identity);
+			from_pool->template remove_component<Component>(pool_identity);
 		}
 
 		template <typename IdType, typename BitType, typename Limit0, typename Limit1>
 		template <typename Component>
 		auto entity<IdType, BitType, Limit0, Limit1>::component() -> Component& {
-			return pool->template component<Component>(pool_identity);
+			return from_pool->template component<Component>(pool_identity);
 		}
 
 
