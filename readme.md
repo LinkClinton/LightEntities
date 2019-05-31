@@ -35,7 +35,7 @@ class move_system : public light::entities::system32 {
 public:
 	move_system(const std::vector<component_type> &list) : system32(list) {}
 
-	void execute(const std::vector<entity<unsigned, unsigned>>& entities) override {
+	void execute(const std::vector<entity32>& entities) override {
 		for (auto e : entities) {
 			auto& p = e.component<position>();
 			auto& s = e.component<direction>();
@@ -69,4 +69,5 @@ int main() {
 
 	entities.execute(system);
 }
+
 ```
