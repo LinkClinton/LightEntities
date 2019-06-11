@@ -1,22 +1,19 @@
 # LightEntities
 
-[`中文`](./readme_cn.md) [`English`](./readme.md)
+[`English`](./readme.md) [`中文`](./readme_cn.md) 
 
-LightEntities is a simple and light [ECS](https://en.wikipedia.org/wiki/Entity_component_system).
+LightEntities是一个简单轻量的[ECS](https://en.wikipedia.org/wiki/Entity_component_system)。
 
 ## Basic Idea and Feature
 
-- Memory Friendly: a simple memory allocator is provided. Any entity removed only clear up the memory it use. And allocator will record this entity and reuse.
-
-- Implicit Component: any class or struct can be component. LightEntities only copy the memory of component to the location that entity use.
-
-- Bitset Match: to find entity who has some components, we provide a bitset for each entity. So we do not need to check components if entity has one by one.
-
-- Light: small and only header file. And easy for extension.
+- 内存友好：使用一个简单的内存分配器来分配实体(`entity`)使用的内存。当实体被移除的时候，其内存块不会被清除，而是保留下来，并且当新的实体需要被分配的时候重新使用。
+- 隐式组件: 任何结构体或者类都可以当作组件(`Component`)使用，**LightEntities将会直接复制其使用的内存到组件的内存池中**。
+- 位运算匹配：为了加速判断一个组件是否含有一些组件，LightEntities通过位运算来加快匹配过程，以提高组件过多时的匹配性能。
+- 轻量：只有小部分代码并且只包含头文件，易于拓展以及并行处理。
 
 ## Requirement
 
-- at least C++ 14 compiler
+- 至少支持C++14的编译器。
 
 ## Example
 
